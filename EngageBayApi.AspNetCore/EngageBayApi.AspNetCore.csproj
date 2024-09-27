@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <LangVersion>default</LangVersion>
+    <Authors>Etienne Charland</Authors>
+    <Company>Hanuman Institute</Company>
+    <Description>Registers EngageBayApi in an ASP.NET Core Web project to add API-managed marketing automation</Description>
+    <PackageLicenseExpression>BSD-2-Clause</PackageLicenseExpression>
+    <Copyright>Copyright © 2019-2023 Etienne Charland</Copyright>
+    <PackageProjectUrl>https://github.com/mysteryx93/EngageBayApi.NET/</PackageProjectUrl>
+    <PackageTags>EngageBay API marketing automation email sender smtp .net</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.3.2</Version>
+    <PackageReleaseNotes>https://github.com/mysteryx93/EngageBayApi.NET/releases</PackageReleaseNotes>
+    <RootNamespace>HanumanInstitute.EngageBayApi.AspNetCore</RootNamespace>
+    <NeutralLanguage>en</NeutralLanguage>
+    <Nullable>enable</Nullable>
+    <Product>EngageBayApi</Product>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\EngageBayApi.AspNetCore.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EngageBayApi\EngageBayApi.csproj" />
+  </ItemGroup>
+</Project>

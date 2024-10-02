@@ -8,7 +8,12 @@ namespace HanumanInstitute.EngageBayApi.IntegrationTests;
 /// </summary>
 public class MockLogger<T> : ILogger<T>
 {
-    private readonly StringBuilder _log = new StringBuilder();
+    private readonly ITestOutputHelper _output;
+    
+    public MockLogger(ITestOutputHelper output)
+    {
+        _output = output;
+    }
 
     public bool RecordRequests { get; set; } = true;
     public bool RecordResponses { get; set; } = true;
@@ -21,14 +26,12 @@ public class MockLogger<T> : ILogger<T>
     {
         if (logLevel == LogLevel.Information && RecordRequests)
         {
-            _log.AppendLine(state.ToStringInvariant());
+            _output.WriteLine(state.ToStringInvariant());
         }
         else if (logLevel == LogLevel.Trace && RecordResponses)
         {
-            _log.AppendLine(state.ToStringInvariant());
-            _log.AppendLine();
+            _output.WriteLine(state.ToStringInvariant());
+            _output.WriteLine("");
         }
     }
-
-    public override string ToString() => _log.ToString();
 }

@@ -17,8 +17,4 @@ public class SelectManyOptions
     /// After a request, use the cursor to fetch the next page.
     /// </summary>
     public string? Cursor { get; set; }
-    /// <summary>
-    /// Additional query parameters to filter the data.
-    /// </summary>
-    public IDictionary<string, object?>? Filters { get; set; }
 }

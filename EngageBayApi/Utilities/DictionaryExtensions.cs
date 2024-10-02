@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Net;
+using System.Text.Json;
 
 namespace HanumanInstitute.EngageBayApi;
 
@@ -17,12 +18,12 @@ internal static class DictionaryExtensions
     /// <returns>The query dictionary.</returns>
     internal static IDictionary<string, object?> AddIfHasValue(this IDictionary<string, object?> list, string key, object? value)
     {
-            if (value != null)
-            {
-                list.Add(key, value);
-            }
-            return list;
+        if (value != null)
+        {
+            list.Add(key, value);
         }
+        return list;
+    }
 
     /// <summary>
     /// Adds all properties of an object into the dictionary using reflection.
@@ -33,26 +34,26 @@ internal static class DictionaryExtensions
     /// <returns>The query dictionary.</returns>
     internal static IDictionary<string, object?> AddObject(this IDictionary<string, object?> list, object? values)
     {
-            if (values != null)
+        if (values != null)
+        {
+            if (values is IDictionary<string, object> objects)
             {
-                if (values is IDictionary<string, object> objects)
+                objects.ToList().ForEach(x => list.Add(x.Key, x.Value));
+            }
+            else
+            {
+                // Object properties through reflection.
+                var properties = values.GetType().GetProperties();
+                foreach (var item in properties)
                 {
-                    objects.ToList().ForEach(x => list.Add(x.Key, x.Value));
-                }
-                else
-                {
-                    // Object properties through reflection.
-                    var properties = values.GetType().GetProperties();
-                    foreach (var item in properties)
-                    {
-                        var itemName = item.Name;
-                        var itemValue = item.GetValue(values, null);
-                        list.Add(itemName, itemValue);
-                    }
+                    var itemName = item.Name;
+                    var itemValue = item.GetValue(values, null);
+                    list.Add(itemName, itemValue);
                 }
             }
-            return list;
         }
+        return list;
+    }
 
     /// <summary>
     /// Wraps a dictionary within a list.
@@ -61,8 +62,8 @@ internal static class DictionaryExtensions
     /// <returns>A new list.</returns>
     internal static List<Dictionary<string, string>> WrapInList(this Dictionary<string, string> dictionary)
     {
-            return new List<Dictionary<string, string>> { dictionary };
-        }
+        return new List<Dictionary<string, string>> { dictionary };
+    }
 
     /// <summary>
     /// Converts a dictionary to a URI-encoded string.
@@ -70,9 +71,10 @@ internal static class DictionaryExtensions
     /// <param name="parameters">The parameters to encode.</param>
     /// <returns>A URI-encoded string.</returns>
     internal static string? ToQueryString(this IDictionary<string, object> parameters) =>
-        parameters.Any() ? string.Join("&",
-            parameters.Where(x => x.Value != null)
-                .Select(kvp => $"{WebUtility.UrlEncode(kvp.Key)}={WebUtility.UrlEncode(ValueToQueryString(kvp.Value))}")) : null;
+        !parameters.Any()
+            ? null
+            : string.Join("&", parameters.Where(x => x.Value != null)
+                .Select(x => $"{WebUtility.UrlEncode(x.Key)}={WebUtility.UrlEncode(ValueToQueryString(x.Value))}"));
 
     /// <summary>
     /// Converts an object into its string representation. Lists will be returned as comma-delimited strings.
@@ -81,10 +83,11 @@ internal static class DictionaryExtensions
     /// <returns>The formatted string.</returns>
     internal static string ValueToQueryString(object value)
     {
-            if (value is IEnumerable enumValue && !(value is string))
-            {
-                return string.Join(",", ((enumValue).Cast<object>()));
-            }
-            return value.ToStringInvariant();
+        if (value is IEnumerable enumValue and not string)
+        {
+            return JsonSerializer.Serialize(value, EngageBaySerializerOptions.Default);
+            // return string.Join(",", (enumValue).Cast<object>());
         }
+        return value.ToStringInvariant();
+    }
 }

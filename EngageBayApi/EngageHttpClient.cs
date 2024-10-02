@@ -78,7 +78,7 @@ public class EngageHttpClient
     /// <exception cref="InvalidOperationException">There was an error while sending or parsing the request.</exception>
     /// <exception cref="HttpRequestException">There was an HTTP communication error or EngageBay returned an error.</exception>
     /// <exception cref="TaskCanceledException">The request timed-out or the user canceled the request's Task.</exception>
-    public Task<JsonElement?> GetJsonAsync(string endpoint, object? values = null, bool returnNotFoundAsNull = true, CancellationToken cancellationToken = default) =>
+    private Task<JsonElement?> GetJsonAsync(string endpoint, object? values = null, bool returnNotFoundAsNull = true, CancellationToken cancellationToken = default) =>
         RequestJsonAsync(endpoint, HttpMethod.Get, false, values, returnNotFoundAsNull, cancellationToken);
 
     /// <summary>
@@ -121,7 +121,7 @@ public class EngageHttpClient
     /// <exception cref="InvalidOperationException">There was an error while sending or parsing the request.</exception>
     /// <exception cref="HttpRequestException">There was an HTTP communication error or EngageBay returned an error.</exception>
     /// <exception cref="TaskCanceledException">The request timed-out or the user canceled the request's Task.</exception>
-    public async Task<JsonElement> DeleteJsonAsync(string endpoint, object? values = null, bool encodeJson = true, CancellationToken cancellationToken = default) =>
+    private async Task<JsonElement> DeleteJsonAsync(string endpoint, object? values = null, bool encodeJson = true, CancellationToken cancellationToken = default) =>
         (await RequestJsonAsync(endpoint, HttpMethod.Delete, encodeJson, values, false, cancellationToken))!.Value;
 
     /// <summary>
@@ -164,7 +164,7 @@ public class EngageHttpClient
     /// <exception cref="InvalidOperationException">There was an error while sending or parsing the request.</exception>
     /// <exception cref="HttpRequestException">There was an HTTP communication error or EngageBay returned an error.</exception>
     /// <exception cref="TaskCanceledException">The request timed-out or the user canceled the request's Task.</exception>
-    public async Task<JsonElement> PostJsonAsync(string endpoint, object? values = null, bool encodeJson = true, CancellationToken cancellationToken = default) =>
+    private async Task<JsonElement> PostJsonAsync(string endpoint, object? values = null, bool encodeJson = true, CancellationToken cancellationToken = default) =>
         (await RequestJsonAsync(endpoint, HttpMethod.Post, encodeJson, values, false, cancellationToken))!.Value;
 
     /// <summary>
@@ -204,7 +204,7 @@ public class EngageHttpClient
     /// <exception cref="InvalidOperationException">There was an error while sending or parsing the request.</exception>
     /// <exception cref="HttpRequestException">There was an HTTP communication error or EngageBay returned an error.</exception>
     /// <exception cref="TaskCanceledException">The request timed-out or the user canceled the request's Task.</exception>
-    public async Task<JsonElement> PutJsonAsync(string endpoint, object? values = null, CancellationToken cancellationToken = default) =>
+    private async Task<JsonElement> PutJsonAsync(string endpoint, object? values = null, CancellationToken cancellationToken = default) =>
         (await RequestJsonAsync(endpoint, HttpMethod.Put, true, values, false, cancellationToken))!.Value;
 
     /// <summary>
@@ -345,12 +345,6 @@ public class EngageHttpClient
             JsonSerializer.Serialize(values, EngageBaySerializerOptions.Default) :
             values is IDictionary<string, object> dict ? dict.ToQueryString() :
             values.GetType().GetProperties().ToDictionary(x => x.Name, x => x.GetValue(values, null)).ToQueryString();
-        // var content = values switch
-        // {
-        //     null => null,
-        //     IDictionary<string, object> dict => dict.ToQueryString(),
-        //     _ => JsonSerializer.Serialize(values, EngageBaySerializerOptions.Default)
-        // };
 
         var requestUrl = endpoint;
         if ((method == HttpMethod.Get || method == HttpMethod.Delete) && !encodeJson && !string.IsNullOrEmpty(content))
@@ -366,16 +360,16 @@ public class EngageHttpClient
         }
         
         using var request = new HttpRequestMessage(method, requestUrl);
-        request.Content = content != null ? new StringContent(content, Encoding.UTF8, encodeJson ? ContentJson : ContentUrl) : null;
+        request.Content = new StringContent(content ?? "", Encoding.UTF8, encodeJson ? ContentJson : ContentUrl);
         var response = await _httpClient.SendAsync(request, cancellationToken);
 
         // Return null instead of throwing an error when object is not found.
+        if (returnNotFoundAsNull && response.StatusCode is HttpStatusCode.BadRequest or HttpStatusCode.NoContent)
+        {
+            return null;
+        }
         if (response.StatusCode == HttpStatusCode.BadRequest)
         {
-            if (returnNotFoundAsNull)
-            {
-                return null;
-            }
             var msg = await response.Content.ReadAsStringAsync();
             throw new InvalidOperationException(Res.ResponseBadRequest.FormatInvariant(msg));
         }

@@ -1,9 +1,9 @@
 ﻿namespace HanumanInstitute.EngageBayApi.Models;
 
-public class ApiContactCallLog : ApiObject
+public class ApiCallLog : ApiObject
 {
     public DateTime? CreatedTime { get; set; }
-    public int? ContactId { get; set; }
+    public long? ContactId { get; set; }
     public string? CallId { get; set; }
     public int? Duration { get; set; }
     public string? Status { get; set; }
@@ -16,8 +16,8 @@ public class ApiContactCallLog : ApiObject
     public string? RecordingUrl { get; set; }
     [JsonPropertyName("isManualEntry")]
     public bool? IsManualEntry { get; set; }
-    public int? OwnerId { get; set; }
-    public IList<int>? Notes { get; set; }
+    public long? OwnerId { get; set; }
+    //public IList<ApiNote>? Notes { get; set; }
     public ApiNote? Note { get; set; }
     [JsonPropertyName("addNote")]
     public bool? AddNote { get; set; }
@@ -31,7 +31,7 @@ public class ApiContactCallLog : ApiObject
     public string? CallType { get; set; }
     [JsonPropertyName("reflectStatus")]
     public bool? ReflectStatus { get; set; }
-    public int? CallCost { get; set; }
+    public decimal? CallCost { get; set; }
     [JsonPropertyName("inActive")]
     public bool? InActive { get; set; }
 }

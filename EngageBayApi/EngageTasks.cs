@@ -8,14 +8,12 @@ public class EngageTasks : EngageBaseDelete<ApiTask>, IEngageTasks
     { }
 
     /// <inheritdoc />
-    public Task<IList<ApiTask>> SelectManyAsync(ApiTaskType? taskType = null, ApiTaskStatus? taskStatus = null, 
+    public Task<IList<ApiTask>> SelectListAsync(ApiTaskType? taskType = null, ApiTaskStatus? taskStatus = null, 
         SelectManyOptions? options = null, CancellationToken cancellationToken = default)
     {
-        options ??= new SelectManyOptions();
-        options.Filters ??= new Dictionary<string, object?>();
-        options.Filters
+        var query = new Dictionary<string, object?>()
             .AddIfHasValue("taskType", taskType)
             .AddIfHasValue("taskStatus", taskStatus);
-        return SelectManyAsync(options, cancellationToken);
+        return SelectListBaseAsync(options, query, cancellationToken);
     }
 }

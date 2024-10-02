@@ -6,21 +6,17 @@ namespace HanumanInstitute.EngageBayApi.IntegrationTests;
 /// Initializes necessary classes to test EngageBay API classes.
 /// </summary>
 /// <typeparam name="T">The type of EngageBay API class to test.</typeparam>
-public class EngageBayContext<T> : IDisposable
+public class EngageBayContext<T>
     where T : class
 {
     private readonly ITestOutputHelper _output;
 
     public EngageBayContext(ITestOutputHelper output = null)
     {
-        if (output != null)
-        {
-            _output = output;
-            AppDomain.CurrentDomain.UnhandledException += (_, _) => Dispose(true);
-        }
+        _output = output;
     }
 
-    public ILogger<EngageHttpClient> Log => _log ??= new MockLogger<EngageHttpClient>();
+    public ILogger<EngageHttpClient> Log => _log ??= new MockLogger<EngageHttpClient>(_output);
     private ILogger<EngageHttpClient> _log;
 
     public EngageHttpClient HttpClient => _httpClient ??= ConfigHelper.GetHttpClient(Log);
@@ -28,21 +24,4 @@ public class EngageBayContext<T> : IDisposable
 
     public T EngageBay => _engageBay ??= (T)Activator.CreateInstance(typeof(T), HttpClient)!;
     private T _engageBay;
-
-    private bool _disposedValue;
-    protected virtual void Dispose(bool disposing)
-    {
-        if (_disposedValue) { return; }
-        if (disposing)
-        {
-            _output?.WriteLine(Log.ToString());
-        }
-        _disposedValue = true;
-    }
-
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
 }

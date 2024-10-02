@@ -7,6 +7,26 @@ public class EngageCompaniesTests(ITestOutputHelper output) :
     protected override ApiCompany GetObjectUpdate() => new ApiCompany().SetUrl("http://www.perdu.com");
 
     [Fact]
+    public async Task SelectMultiple_NoArgs_ReturnsAll()
+    {
+        var c = CreateContext();
+
+        var result = await c.EngageBay.SelectListAsync();
+
+        Assert.NotEmpty(result);
+    }
+
+    [Fact]
+    public async Task SelectMultiple_PageSize1_ReturnsSingle()
+    {
+        var c = CreateContext();
+
+        var result = await c.EngageBay.SelectListAsync(new SelectManyOptions { PageSize = 1 });
+
+        Assert.Single(result);
+    }
+    
+    [Fact]
     public async Task AddContact_ValidId_CompanyHasContact()
     {
         var c = CreateContext();

@@ -17,12 +17,8 @@ public abstract class EngageBaseWrite<T> : EngageBaseRead<T>, IEngageBaseWrite<T
     /// <param name="value">An object containing the values to add.</param>
     /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>The created object.</returns>
-    public async Task<T> CreateAsync(T value, CancellationToken cancellationToken = default)
-    {
-        var json = await ApiClient.PostJsonAsync(
-            Endpoint + CreateEndpoint, value, true, cancellationToken);
-        return json.Parse<T>();
-    }
+    public Task<T> CreateAsync(T value, CancellationToken cancellationToken = default) =>
+        ApiClient.PostAsync<T>(Endpoint + CreateEndpoint, value, true, cancellationToken);
 
     /// <summary>
     /// Updates an existing object with given data.
@@ -31,12 +27,11 @@ public abstract class EngageBaseWrite<T> : EngageBaseRead<T>, IEngageBaseWrite<T
     /// <param name="value">An object containing the values to update.</param>
     /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A dictionary of updated fields.</returns>
-    public async Task<T> UpdateAsync(long objectId, T value, CancellationToken cancellationToken = default)
+    public Task<T> UpdateAsync(long objectId, T value, CancellationToken cancellationToken = default)
     {
         value.Id = objectId;
-        var json = await ApiClient.PutJsonAsync(
+        return ApiClient.PutAsync<T>(
             Endpoint + UpdateEndpoint, value, cancellationToken);
-        return json.Parse<T>();
     }
 
     protected virtual string UpdateEndpoint => "";

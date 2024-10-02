@@ -14,12 +14,4 @@ public interface IEngageBaseRead<T>
     /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>The selected object.</returns>
     Task<T?> SelectAsync(long id, CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Retrieves a list of objects.
-    /// </summary>
-    /// <param name="options">Various options to add to the select request.</param>
-    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
-    /// <returns>A list of objects.</returns>
-    Task<IList<T>> SelectManyAsync(SelectManyOptions? options = null, CancellationToken cancellationToken = default);
 }

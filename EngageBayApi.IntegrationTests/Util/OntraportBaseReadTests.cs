@@ -7,6 +7,7 @@ public abstract class EngageBaseReadTests<TClass, TObject>
     protected ITestOutputHelper Output { get; }
     protected long ValidId { get; }
     protected long InvalidId { get; } = 99999;
+    protected string InvalidEmail { get; } = "Invalid";
 
     protected EngageBaseReadTests(ITestOutputHelper output, long validId)
     {
@@ -22,7 +23,7 @@ public abstract class EngageBaseReadTests<TClass, TObject>
     [Fact]
     public async Task Select_InvalidId_ReturnsNull()
     {
-        using var c = CreateContext();
+        var c = CreateContext();
 
         var result = await c.EngageBay.SelectAsync(InvalidId);
 
@@ -32,30 +33,10 @@ public abstract class EngageBaseReadTests<TClass, TObject>
     [Fact]
     public async Task Select_ValidId_ReturnsData()
     {
-        using var c = CreateContext();
+        var c = CreateContext();
 
         var result = await c.EngageBay.SelectAsync(ValidId);
 
         Assert.NotNull(result);
-    }
-
-    [Fact]
-    public async Task SelectMultiple_NoArgs_ReturnsAll()
-    {
-        using var c = CreateContext();
-
-        var result = await c.EngageBay.SelectManyAsync();
-
-        Assert.NotEmpty(result);
-    }
-
-    [Fact]
-    public async Task SelectMultiple_PageSize1_ReturnsSingle()
-    {
-        using var c = CreateContext();
-
-        var result = await c.EngageBay.SelectManyAsync(new SelectManyOptions { PageSize = 1 });
-
-        Assert.Single(result);
     }
 }

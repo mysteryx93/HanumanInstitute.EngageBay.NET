@@ -9,64 +9,64 @@ namespace HanumanInstitute.EngageBayApi;
 /// </summary>
 public static class JsonElementExtensions
 {
-    /// <summary>
-    /// Parses JSON as a single object.
-    /// </summary>
-    /// <param name="json">The JSON data to parse.</param>
-    /// <typeparam name="T">The data type of parse into.</typeparam>
-    /// <returns>An object of type T.</returns>
-    /// <exception cref="InvalidOperationException">Response data could not be parsed.</exception>
-    public static T Parse<T>(this JsonElement json) => 
-        ParseOrThrow<T>(json);
-    
-    /// <summary>
-    /// Parses JSON as a single object.
-    /// </summary>
-    /// <param name="json">The JSON data to parse.</param>
-    /// <typeparam name="T">The data type of parse into.</typeparam>
-    /// <returns>An object of type T.</returns>
-    /// <exception cref="InvalidOperationException">Response data could not be parsed.</exception>
-    public static T? Parse<T>(this JsonElement? json) => 
-        json.HasValue ? ParseOrThrow<T>(json!.Value) : default;
-    
-    /// <summary>
-    /// Parses JSON as a list of objects.
-    /// </summary>
-    /// <param name="json">The JSON data to parse.</param>
-    /// <typeparam name="T">The data type of parse into.</typeparam>
-    /// <returns>A list of objects of type T.</returns>
-    /// <exception cref="InvalidOperationException">Response data could not be parsed.</exception>
-    public static IList<T> ParseList<T>(this JsonElement json) =>
-        json.EnumerateArray().Select(x => x.ParseOrThrow<T>()).ToList();
-    
-    /// <summary>
-    /// Parses JSON as a list of objects.
-    /// </summary>
-    /// <param name="json">The JSON data to parse.</param>
-    /// <typeparam name="T">The data type of parse into.</typeparam>
-    /// <returns>A list of objects of type T.</returns>
-    /// <exception cref="InvalidOperationException">Response data could not be parsed.</exception>
-    public static IList<T> ParseList<T>(this JsonElement? json) =>
-        json.HasValue ? json!.Value.EnumerateArray().Select(x => x.ParseOrThrow<T>()).ToList() : [];
-    
-    /// <summary>
-    /// Creates an instance of the ApiObject of type T and parses data into it.
-    /// </summary>
-    /// <param name="json">The JSON data to parse.</param>
-    /// <typeparam name="T">The data type of parse into.</typeparam>
-    /// <returns>A new object of type T.</returns>
-    /// <exception cref="InvalidOperationException">Response data could not be parsed.</exception>
-    private static T ParseOrThrow<T>(this JsonElement json)
-    {
-        try
-        {
-            return json.ToObject<T>();
-        }
-        catch (JsonException ex)
-        {
-            throw new InvalidOperationException(Resources.ResponseInvalidJson, ex);
-        }
-    }
+    // /// <summary>
+    // /// Parses JSON as a single object.
+    // /// </summary>
+    // /// <param name="json">The JSON data to parse.</param>
+    // /// <typeparam name="T">The data type of parse into.</typeparam>
+    // /// <returns>An object of type T.</returns>
+    // /// <exception cref="InvalidOperationException">Response data could not be parsed.</exception>
+    // private static T Parse<T>(this JsonElement json) => 
+    //     ParseOrThrow<T>(json);
+    //
+    // /// <summary>
+    // /// Parses JSON as a single object.
+    // /// </summary>
+    // /// <param name="json">The JSON data to parse.</param>
+    // /// <typeparam name="T">The data type of parse into.</typeparam>
+    // /// <returns>An object of type T.</returns>
+    // /// <exception cref="InvalidOperationException">Response data could not be parsed.</exception>
+    // private static T? Parse<T>(this JsonElement? json) => 
+    //     json.HasValue ? ParseOrThrow<T>(json!.Value) : default;
+    //
+    // /// <summary>
+    // /// Parses JSON as a list of objects.
+    // /// </summary>
+    // /// <param name="json">The JSON data to parse.</param>
+    // /// <typeparam name="T">The data type of parse into.</typeparam>
+    // /// <returns>A list of objects of type T.</returns>
+    // /// <exception cref="InvalidOperationException">Response data could not be parsed.</exception>
+    // private static IList<T> ParseList<T>(this JsonElement json) =>
+    //     json.EnumerateArray().Select(x => x.ParseOrThrow<T>()).ToList();
+    //
+    // /// <summary>
+    // /// Parses JSON as a list of objects.
+    // /// </summary>
+    // /// <param name="json">The JSON data to parse.</param>
+    // /// <typeparam name="T">The data type of parse into.</typeparam>
+    // /// <returns>A list of objects of type T.</returns>
+    // /// <exception cref="InvalidOperationException">Response data could not be parsed.</exception>
+    // private static IList<T> ParseList<T>(this JsonElement? json) =>
+    //     json.HasValue ? json!.Value.EnumerateArray().Select(x => x.ParseOrThrow<T>()).ToList() : [];
+    //
+    // /// <summary>
+    // /// Creates an instance of the ApiObject of type T and parses data into it.
+    // /// </summary>
+    // /// <param name="json">The JSON data to parse.</param>
+    // /// <typeparam name="T">The data type of parse into.</typeparam>
+    // /// <returns>A new object of type T.</returns>
+    // /// <exception cref="InvalidOperationException">Response data could not be parsed.</exception>
+    // private static T ParseOrThrow<T>(this JsonElement json)
+    // {
+    //     try
+    //     {
+    //         return json.ToObject<T>();
+    //     }
+    //     catch (JsonException ex)
+    //     {
+    //         throw new InvalidOperationException(Resources.ResponseInvalidJson, ex);
+    //     }
+    // }
     
     /// <summary>
     /// Deserializes a JsonElement as an object, which is not supported in .NET 3.1.
@@ -92,8 +92,7 @@ public static class JsonElementExtensions
         }
     }
 
-    [return: MaybeNull]
-    public static T GetValue<T>(this ref Utf8JsonReader reader)
+    public static T? GetValue<T>(this ref Utf8JsonReader reader)
     {
         var value = reader.TokenType switch
         {
@@ -107,9 +106,9 @@ public static class JsonElementExtensions
         if (typeof(T) == typeof(string) && value?.GetType() != typeof(string))
         {
             // False cannot be converted to String without this.
-            return (T)(object)value?.ToStringInvariant()!;
+            return (T?)(object?)value?.ToStringInvariant();
         }
-        return (T)value!;
+        return (T?)value!;
     }
 
     private static object? ReadNumber<T>(ref Utf8JsonReader reader)

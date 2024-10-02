@@ -25,9 +25,8 @@ public abstract class EngageBaseComplex<T> : EngageBaseDelete<T>, IEngageBaseCom
             { "page_size", pageSize }
         };
 
-        var json = await ApiClient.GetJsonAsync(
-            "dev/api/search", query, false, cancellationToken);
-        return json.ParseList<T>();
+        return await ApiClient.GetAsync<List<T>>(
+            "dev/api/search", query, false, cancellationToken) ?? [];
     }
 
     private static string FirstCharToUpper(string input) =>

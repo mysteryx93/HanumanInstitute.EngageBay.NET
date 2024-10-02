@@ -1,5 +1,4 @@
-﻿using System.Net.Http;
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace HanumanInstitute.EngageBayApi;
 
@@ -17,38 +16,16 @@ public abstract class EngageBaseRead<T> : IEngageBaseRead<T>
     }
 
     /// <inheritdoc />
-    public async Task<T?> SelectAsync(long id, CancellationToken cancellationToken = default)
-    {
-        var json = await ApiClient.GetJsonAsync(
-            $"{Endpoint}/{id}", cancellationToken: cancellationToken);
-        return json.Parse<T>();
-    }
+    public Task<T?> SelectAsync(long id, CancellationToken cancellationToken = default) =>
+        ApiClient.GetAsync<T>($"{Endpoint}/{id}", cancellationToken: cancellationToken);
 
     /// <summary>
-    /// When overriden in a derived class, allows custom parsing of SelectAsync response.
+    /// Retrieves a list of objects.
     /// </summary>
-    /// <param name="json">The JSON data to parse.</param>
-    /// <returns>A T or object derived from it.</returns>
-    protected virtual T OnParseSelect(JsonElement json) => json.Parse<T>();
-
-    /// <inheritdoc />
-    public async Task<IList<T>> SelectManyAsync(SelectManyOptions? options = null, CancellationToken cancellationToken = default)
-    {
-        options ??= new SelectManyOptions();
-        var query = new Dictionary<string, object?>()
-            .AddObject(options.Filters)
-            .AddIfHasValue("page_size", options.PageSize)
-            .AddIfHasValue("sort_key", options.SortKey)
-            .AddIfHasValue("cursor", options.Cursor);
-    
-        return await ApiClient.PostAsync<IList<T>>(
-            $"{Endpoint}", query, false, cancellationToken);
-    }
-
-    /// <summary>
-    /// When overriden in a derived class, allows custom parsing of SelectMultipleAsync response.
-    /// </summary>
-    /// <param name="json">The JSON data to parse.</param>
-    /// <returns>A List{T} or object derived from it.</returns>
-    protected virtual IList<TParse> OnParseSelectMultipleAsync<TParse>(JsonElement json) => json.ParseList<TParse>();
+    /// <param name="options">Various options to add to the select request.</param>
+    /// <param name="queryParams">Additional parameters to send with the select query.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A list of objects.</returns>
+    protected Task<IList<T>> SelectListBaseAsync(SelectManyOptions? options = null, IDictionary<string, object?>? queryParams = null, CancellationToken cancellationToken = default) =>
+        ApiClient.PostAsync<IList<T>>($"{Endpoint}", options.ToQuery().AddObject(queryParams), false, cancellationToken);
 }

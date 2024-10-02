@@ -11,11 +11,11 @@ public abstract class EngageBaseComplexTests<TClass, TObject> : EngageBaseDelete
     {
         _searchKeyword = searchKeyword;
     }
-
+    
     [Fact]
     public async Task Search_Keyword_ReturnsData()
     {
-        using var c = CreateContext();
+        var c = CreateContext();
 
         var result = await c.EngageBay.SearchAsync(_searchKeyword);
 

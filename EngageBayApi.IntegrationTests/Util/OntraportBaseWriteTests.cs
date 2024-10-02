@@ -14,7 +14,7 @@ public abstract class EngageBaseWriteTests<TClass, TObject> : EngageBaseReadTest
     // [Fact]
     // public async Task CreateAsync_Object_ReturnsData()
     // {
-    //     using var c = CreateContext();
+    //     var c = CreateContext();
     //
     //     var result = await c.EngageBay.CreateAsync(CreateObject());
     //
@@ -24,7 +24,7 @@ public abstract class EngageBaseWriteTests<TClass, TObject> : EngageBaseReadTest
     [Fact]
     public async Task Update_ValidId_ReturnsData()
     {
-        using var c = CreateContext();
+        var c = CreateContext();
 
         var result = await c.EngageBay.UpdateAsync(ValidId, GetObjectUpdate());
 
@@ -32,12 +32,14 @@ public abstract class EngageBaseWriteTests<TClass, TObject> : EngageBaseReadTest
     }
     
     [Fact]
-    public async Task Update_InvalidId_ThrowsError()
+    public async Task Update_InvalidId_CreatesWithId()
     {
-        using var c = CreateContext();
+        var c = CreateContext();
 
-        var act = () => c.EngageBay.UpdateAsync(InvalidId, GetObjectUpdate());
+        await c.EngageBay.UpdateAsync(InvalidId, GetObjectUpdate());
 
-        await Assert.ThrowsAsync<InvalidOperationException>(act);
+        var result = await c.EngageBay.SelectAsync(InvalidId);
+        Assert.NotNull(result);
+        Assert.Equal(InvalidId, result.Id);
     }
 }

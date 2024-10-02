@@ -12,7 +12,7 @@ public abstract class EngageBaseDeleteTests<TClass, TObject> : EngageBaseWriteTe
     [Fact]
     public async Task CreateAndDelete_IdJustCreated_ThrowsNoException()
     {
-        using var c = CreateContext();
+        var c = CreateContext();
         
         var obj = await c.EngageBay.CreateAsync(GetObjectCreate());
         var id = obj.Id!.Value;

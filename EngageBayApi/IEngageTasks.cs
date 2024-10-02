@@ -4,7 +4,7 @@
 /// Provides EngageBay API support for Task objects.
 /// A task object is created when a task is assigned to a contact or other object.
 /// </summary>
-public interface IEngageTasks : IEngageBaseRead<ApiTask>
+public interface IEngageTasks : IEngageBaseDelete<ApiTask>
 {
     /// <summary>
     /// Retrieves the list of tasks.
@@ -15,5 +15,5 @@ public interface IEngageTasks : IEngageBaseRead<ApiTask>
     /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A list of tasks.</returns>
     Task<IList<ApiTask>> SelectListAsync(ApiTaskType? taskType = null, ApiTaskStatus? taskStatus = null,
-        SelectManyOptions? options = null, CancellationToken cancellationToken = default);
+        SelectListOptions? options = null, CancellationToken cancellationToken = default);
 }

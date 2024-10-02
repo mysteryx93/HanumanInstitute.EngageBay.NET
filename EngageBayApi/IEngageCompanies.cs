@@ -11,7 +11,7 @@ public interface IEngageCompanies : IEngageBaseComplex<ApiCompany>
     /// <param name="options">Various options to add to the select request.</param>
     /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A list of companies.</returns>
-    Task<IList<ApiCompany>> SelectListAsync(SelectManyOptions? options = null, CancellationToken cancellationToken = default);
+    Task<IList<ApiCompany>> SelectListAsync(SelectListOptions? options = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Add contact to company using the contact's ID.

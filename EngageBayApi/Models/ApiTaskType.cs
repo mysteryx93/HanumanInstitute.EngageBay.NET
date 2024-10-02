@@ -2,10 +2,7 @@
 
 public enum ApiTaskType
 {
-    [JsonPropertyName("TODO")]
     Todo,
-    [JsonPropertyName("EMAIL")]
     Email,
-    [JsonPropertyName("CALL")]
     Call
 }

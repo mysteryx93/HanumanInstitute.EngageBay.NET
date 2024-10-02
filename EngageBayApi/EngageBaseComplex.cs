@@ -24,11 +24,23 @@ public abstract class EngageBaseComplex<T> : EngageBaseDelete<T>, IEngageBaseCom
             { "type", FirstCharToUpper(_endpointSingular) },
             { "page_size", pageSize }
         };
-
         return await ApiClient.GetAsync<List<T>>(
             "dev/api/search", query, false, cancellationToken) ?? [];
     }
 
     private static string FirstCharToUpper(string input) =>
-        string.IsNullOrEmpty(input) ? input : string.Concat(input[0].ToString().ToUpper(), input.Substring(1)); 
+        string.IsNullOrEmpty(input) ? input : string.Concat(input[0].ToString().ToUpper(), input.Substring(1));
+
+    /// <inheritdoc />
+    public async Task<ApiNote> AddNote(long parentId, string subject, string? content, CancellationToken cancellationToken = default)
+    {
+        var note = new ApiNote
+        {
+            ParentId = parentId,
+            Subject = subject,
+            Content = content
+        };
+        return await ApiClient.PostAsync<ApiNote>(
+            "dev/api/panel/notes", note, true, cancellationToken);
+    }
 }

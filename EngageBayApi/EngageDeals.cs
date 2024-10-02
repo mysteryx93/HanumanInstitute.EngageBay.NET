@@ -14,7 +14,7 @@ public class EngageDeals : EngageBaseComplex<ApiDeal>, IEngageDeals
     /// <param name="options">Various options to add to the select request.</param>
     /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A list of contacts.</returns>
-    public Task<IList<ApiDeal>> SelectListAsync(long? trackId = null, SelectManyOptions? options = null,
+    public Task<IList<ApiDeal>> SelectListAsync(long? trackId = null, SelectListOptions? options = null,
         CancellationToken cancellationToken = default)
     {
         var query = new Dictionary<string, object?>()

@@ -3,13 +3,13 @@
 /// <inheritdoc cref="IEngageTasks" />
 public class EngageTasks : EngageBaseDelete<ApiTask>, IEngageTasks
 {
-    public EngageTasks(EngageHttpClient apiRequest) : 
-        base(apiRequest, "dev/api/panel/tasks")
+    public EngageTasks(EngageHttpClient apiClient) : 
+        base(apiClient, "dev/api/panel/tasks")
     { }
 
     /// <inheritdoc />
     public Task<IList<ApiTask>> SelectListAsync(ApiTaskType? taskType = null, ApiTaskStatus? taskStatus = null, 
-        SelectManyOptions? options = null, CancellationToken cancellationToken = default)
+        SelectListOptions? options = null, CancellationToken cancellationToken = default)
     {
         var query = new Dictionary<string, object?>()
             .AddIfHasValue("taskType", taskType)

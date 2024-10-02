@@ -21,4 +21,14 @@ public abstract class EngageBaseComplexTests<TClass, TObject> : EngageBaseDelete
 
         Assert.NotEmpty(result);
     }
+    
+    [Fact]
+    public async Task AddNote_WithContent_ReturnsNewNote()
+    {
+        var c = CreateContext();
+
+        var result = await c.EngageBay.AddNote(ValidId, "UnitTestNote", "with content");
+
+        Assert.Equal(ValidId, result.ParentId);
+    }
 }

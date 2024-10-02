@@ -7,7 +7,7 @@ public class EngageTracksTests(ITestOutputHelper output) :
     protected override ApiTrack GetObjectUpdate() => new ApiTrack { Name = "Updated", Milestones = new List<ApiMilestone> { new() {LabelName = "M1"}}, CreatedTime = DateTime.Now};
     
     [Fact]
-    public async Task SelectMultiple_NoArgs_ReturnsAll()
+    public async Task SelectList_NoArgs_ReturnsAll()
     {
         var c = CreateContext();
 

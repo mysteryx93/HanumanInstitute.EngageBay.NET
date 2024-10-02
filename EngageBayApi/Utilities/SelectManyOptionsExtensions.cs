@@ -7,9 +7,9 @@ public static class SelectManyOptionsExtensions
     /// </summary>
     /// <param name="options">The options to get the query parameters for.</param>
     /// <returns>A dictionary of query parameters.</returns>
-    public static IDictionary<string, object?> ToQuery(this SelectManyOptions? options)
+    public static IDictionary<string, object?> ToQuery(this SelectListOptions? options)
     {
-        options ??= new SelectManyOptions();
+        options ??= new SelectListOptions();
         return new Dictionary<string, object?>()
             .AddIfHasValue("page_size", options.PageSize)
             .AddIfHasValue("sort_key", options.SortKey)

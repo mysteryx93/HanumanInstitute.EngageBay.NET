@@ -81,13 +81,19 @@ internal static class DictionaryExtensions
     /// </summary>
     /// <param name="value">The value to convert to string.</param>
     /// <returns>The formatted string.</returns>
-    internal static string ValueToQueryString(object value)
+    private static string ValueToQueryString(object value) =>
+        TrimQuotes(JsonSerializer.Serialize(value, EngageBaySerializerOptions.Default));
+
+    /// <summary>
+    /// If value was serialized as a string, remove string quotes.
+    /// </summary>
+    private static string TrimQuotes(string value)
     {
-        if (value is IEnumerable enumValue and not string)
+        if (value.Length < 2) { return value; }
+        if (value[0] == '"' && value[value.Length - 1] == '"')
         {
-            return JsonSerializer.Serialize(value, EngageBaySerializerOptions.Default);
-            // return string.Join(",", (enumValue).Cast<object>());
+            return value.Substring(1, value.Length - 2);
         }
-        return value.ToStringInvariant();
+        return value;
     }
 }

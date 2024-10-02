@@ -15,4 +15,14 @@ public interface IEngageBaseComplex<T> : IEngageBaseDelete<T>
     /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A list of objects matching the search terms.</returns>
     public Task<IList<T>> SearchAsync(string value, int? pageSize = null, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Add note to contacts, companies or deals.
+    /// </summary>
+    /// <param name="parentId">The ID of the contact, company or deal.</param>
+    /// <param name="subject">The subject of the note.</param>
+    /// <param name="content">The content of the note.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>The newly-created note.</returns>
+    Task<ApiNote> AddNote(long parentId, string subject, string? content, CancellationToken cancellationToken = default);
 }

@@ -8,7 +8,7 @@ public class EngageDealsTests(ITestOutputHelper output) :
     private const long EnergyReadingTrack = 5796369815306240;
     
     [Fact]
-    public async Task SelectMultiple_NoArgs_ReturnsAll()
+    public async Task SelectList_NoArgs_ReturnsAll()
     {
         var c = CreateContext();
 
@@ -18,7 +18,7 @@ public class EngageDealsTests(ITestOutputHelper output) :
     }
 
     [Fact]
-    public async Task SelectMultiple_WithTrack_ReturnsForTrack()
+    public async Task SelectList_WithTrack_ReturnsForTrack()
     {
         var c = CreateContext();
 

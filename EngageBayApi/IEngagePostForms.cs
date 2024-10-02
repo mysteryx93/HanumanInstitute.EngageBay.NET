@@ -11,14 +11,6 @@ public interface IEngagePostForms
     /// </summary>
     /// <param name="formId">The EngageBay UID of the form.</param>
     /// <param name="formParams">The list of form data to send.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     Task ServerPostAsync(string formId, IDictionary<string, object?> formParams, CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Posts an EngageBay form with specified data from the client.
-    /// </summary>
-    /// <param name="response">The Http response handler.</param>
-    /// <param name="formId">The EngageBay UID of the form.</param>
-    /// <param name="formParams">The list of form data to send.</param>
-    /// <returns>The HTML page that performs the post and redirect.</returns>
-    string ClientPost(string formId, IDictionary<string, object?> formParams);
 }

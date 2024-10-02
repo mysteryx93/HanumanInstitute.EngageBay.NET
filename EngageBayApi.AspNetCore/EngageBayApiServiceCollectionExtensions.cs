@@ -32,10 +32,17 @@ public static class EngageApiServiceCollectionExtensions
             additionalHttpConfig(formsClient);
         }
 
+        services.TryAddTransient<IEngageBroadcasts, EngageBroadcasts>();
         services.TryAddTransient<IEngageCompanies, EngageCompanies>();
         services.TryAddTransient<IEngageContacts, EngageContacts>();
+        services.TryAddTransient<IEngageCustomFields, EngageCustomFields>();
+        services.TryAddTransient<IEngageDeals, EngageDeals>();
         services.TryAddTransient<IEngageForms, EngageForms>();
+        services.TryAddTransient<IEngageProducts, EngageProducts>();
+        services.TryAddTransient<IEngageTags, EngageTags>();
         services.TryAddTransient<IEngageTasks, EngageTasks>();
+        services.TryAddTransient<IEngageTracks, EngageTracks>();
+        services.TryAddTransient<IEngageUsers, EngageUsers>();
 
         return services;
     }

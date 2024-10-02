@@ -1,7 +1,6 @@
 ﻿namespace HanumanInstitute.EngageBayApi.Models;
 
-public enum ApiPropertyType
+public class ApiEvent
 {
-    System,
-    Custom
+    
 }

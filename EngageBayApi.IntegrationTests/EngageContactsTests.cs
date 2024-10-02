@@ -6,6 +6,10 @@ public class EngageContactsTests(ITestOutputHelper output) :
     public const long ValidContactId = 5569229278674944;
     public const string ValidContactEmail = "best@email.ever";
     public const string ValidOwnerEmail = "etienne@hanumaninstitute.com";
+    public const long ValidFormId = 6313033308831744;
+    public const long ValidSequenceId = 6603373836238848;
+    public const long ValidListId = 4794865247584256;
+    public const long ValidProductId = 5889207748001792;
     public const string Tag1 = "Test Tag 1";
     public const string Tag2 = "Test Tag 2";
     
@@ -13,7 +17,7 @@ public class EngageContactsTests(ITestOutputHelper output) :
     protected override ApiContact GetObjectUpdate() => new ApiContact().SetName("Updated");
     
     [Fact]
-    public async Task SelectMultiple_NoArgs_ReturnsAll()
+    public async Task SelectList_NoArgs_ReturnsAll()
     {
         var c = CreateContext();
 
@@ -23,11 +27,11 @@ public class EngageContactsTests(ITestOutputHelper output) :
     }
 
     [Fact]
-    public async Task SelectMultiple_PageSize1_ReturnsSingle()
+    public async Task SelectList_PageSize1_ReturnsSingle()
     {
         var c = CreateContext();
 
-        var result = await c.EngageBay.SelectListAsync(new SelectManyOptions { PageSize = 1 });
+        var result = await c.EngageBay.SelectListAsync(new SelectListOptions { PageSize = 1 });
 
         Assert.Single(result);
     }
@@ -211,4 +215,47 @@ public class EngageContactsTests(ITestOutputHelper output) :
         Assert.Empty(result);
     }
 
+    [Fact]
+    public async Task AddToForm_ValidId_NoError()
+    {
+        var c = CreateContext();
+
+        await c.EngageBay.AddToFormAsync(ValidContactEmail, ValidFormId);
+        
+    }
+    
+    [Fact]
+    public async Task AddToSequence_ValidId_NoError()
+    {
+        var c = CreateContext();
+
+        await c.EngageBay.AddToSequenceAsync(ValidContactEmail, ValidSequenceId);
+    }
+    
+    [Fact]
+    public async Task AddToList_ValidId_NoError()
+    {
+        var c = CreateContext();
+
+        await c.EngageBay.AddToListAsync(ValidContactEmail, ValidListId);
+    }
+    
+    [Fact]
+    public async Task SelectListOfLists_NoArgs_ReturnsAll()
+    {
+        var c = CreateContext();
+
+        var result = await c.EngageBay.SelectListOfListsAsync();
+
+        Assert.NotEmpty(result);
+    }
+    
+    [Fact]
+    public async Task AddAndRemoveProduct_Valid_NoError()
+    {
+        var c = CreateContext();
+
+        await c.EngageBay.AddProductAsync(ValidId, ValidProductId);
+        await c.EngageBay.RemoveProductAsync(ValidId, ValidProductId);
+    }
 }

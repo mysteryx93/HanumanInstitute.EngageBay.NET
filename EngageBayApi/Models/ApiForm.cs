@@ -4,7 +4,7 @@ public class ApiForm : ApiObject
 {
     public string? Name { get; set; }
     public string? AliasName { get; set; }
-    public int? OwnerId { get; set; }
+    public long? OwnerId { get; set; }
     public DateTime? CreatedTime { get; set; }
     public DateTime? UpdatedTime { get; set; }
     [JsonPropertyName("formHtml")]
@@ -17,5 +17,5 @@ public class ApiForm : ApiObject
     public string? IncentiveEmail { get; set; }
     public string? Thumbnail { get; set; }
     [JsonPropertyName("formStats")]
-    public IDictionary<string, int>? FormStats { get; set; }
+    public IDictionary<string, long>? FormStats { get; set; }
 }

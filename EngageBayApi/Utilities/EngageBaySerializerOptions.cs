@@ -18,10 +18,18 @@ public static class EngageBaySerializerOptions
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
         result.Converters.Add(new JsonConverterDateTime());
-        result.Converters.Add(new JsonConverterStringEnum<ApiFieldType>(new UpperCaseNamingPolicy()));
-        result.Converters.Add(new JsonConverterStringEnum<ApiPropertyType>(new UpperCaseNamingPolicy()));
-        result.Converters.Add(new JsonConverterStringEnum<ApiTaskStatus>(new SnakeCaseNamingPolicy()));
-        result.Converters.Add(new JsonConverterStringEnum<ApiTaskType>(new UpperCaseNamingPolicy()));
+        result.Converters.Add(new JsonConverterDateTimeNullable());
+        result.Converters.AddEnum<ApiFieldType>(new UpperCaseNamingPolicy());
+        result.Converters.AddEnum<ApiPropertyType>(new UpperCaseNamingPolicy());
+        result.Converters.AddEnum<ApiTaskStatus>(new SnakeCaseNamingPolicy());
+        result.Converters.AddEnum<ApiTaskType>(new UpperCaseNamingPolicy());
         return result;
+    }
+
+    private static void AddEnum<T>(this IList<JsonConverter> converters, JsonNamingPolicy namingPolicy)
+        where T : struct
+    {
+        converters.Add(new JsonConverterStringEnum<T>(namingPolicy));
+        converters.Add(new JsonConverterStringEnumNullable<T>(namingPolicy));
     }
 }

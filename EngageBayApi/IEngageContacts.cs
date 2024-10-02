@@ -12,7 +12,7 @@ public interface IEngageContacts : IEngageBaseComplex<ApiContact>
     /// <param name="options">Various options to add to the select request.</param>
     /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A list of contacts.</returns>
-    Task<IList<ApiContact>> SelectListAsync(SelectManyOptions? options = null, CancellationToken cancellationToken = default);
+    Task<IList<ApiContact>> SelectListAsync(SelectListOptions? options = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Returns data for a single contact by contact email.
@@ -105,7 +105,7 @@ public interface IEngageContacts : IEngageBaseComplex<ApiContact>
     /// <param name="options">Various options to add to the select request.</param>
     /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A list of notes.</returns>
-    Task<IList<ApiNote>?> SelectNotesAsync(long contactId, SelectManyOptions? options = null, CancellationToken cancellationToken = default);
+    Task<IList<ApiNote>?> SelectNotesAsync(long contactId, SelectListOptions? options = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// This endpoint is used to retrieve call logs of contact by contact ID.
@@ -114,5 +114,54 @@ public interface IEngageContacts : IEngageBaseComplex<ApiContact>
     /// <param name="options">Various options to add to the select request.</param>
     /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A list of call logs.</returns>
-    Task<IList<ApiCallLog>?> SelectCallLogsAsync(long contactId, SelectManyOptions? options = null, CancellationToken cancellationToken = default);
+    Task<IList<ApiCallLog>?> SelectCallLogsAsync(long contactId, SelectListOptions? options = null, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Add contact to a form.
+    /// </summary>
+    /// <param name="email">The email of the contact.</param>
+    /// <param name="formId">The form to add the contact to.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    Task AddToFormAsync(string email, long formId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Add contact to a sequence.
+    /// </summary>
+    /// <param name="email">The email of the contact.</param>
+    /// <param name="sequenceId">The sequence to add the contact to.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    Task AddToSequenceAsync(string email, long sequenceId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Add contact to a list.
+    /// </summary>
+    /// <param name="email">The email of the contact.</param>
+    /// <param name="listId">The list to add the contact to.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    Task AddToListAsync(string email, long listId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Returns the list of all contact lists.
+    /// </summary>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    /// <returns>A list of contact lists.</returns>
+    Task<IList<ApiTrack>> SelectListOfListsAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Adds a product to a contact.
+    /// </summary>
+    /// <param name="contactId">The ID of the contact.</param>
+    /// <param name="productId">The ID of the product to add.</param>
+    /// <param name="subscribedOn">The date of the product subscription.</param>
+    /// <param name="interval"></param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    Task<ApiContact> AddProductAsync(long contactId, long productId, DateTime? subscribedOn = null, string? interval = null, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Removes a product from a contact.
+    /// </summary>
+    /// <param name="contactId">The ID of the contact.</param>
+    /// <param name="productId">The ID of the product to remove.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
+    Task<ApiContact> RemoveProductAsync(long contactId, long productId, CancellationToken cancellationToken = default);
 }

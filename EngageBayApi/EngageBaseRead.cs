@@ -26,6 +26,6 @@ public abstract class EngageBaseRead<T> : IEngageBaseRead<T>
     /// <param name="queryParams">Additional parameters to send with the select query.</param>
     /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A list of objects.</returns>
-    protected Task<IList<T>> SelectListBaseAsync(SelectManyOptions? options = null, IDictionary<string, object?>? queryParams = null, CancellationToken cancellationToken = default) =>
+    protected Task<IList<T>> SelectListBaseAsync(SelectListOptions? options = null, IDictionary<string, object?>? queryParams = null, CancellationToken cancellationToken = default) =>
         ApiClient.PostAsync<IList<T>>($"{Endpoint}", options.ToQuery().AddObject(queryParams), false, cancellationToken);
 }

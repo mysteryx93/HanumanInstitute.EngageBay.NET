@@ -7,7 +7,7 @@ public class EngageCompaniesTests(ITestOutputHelper output) :
     protected override ApiCompany GetObjectUpdate() => new ApiCompany().SetUrl("http://www.perdu.com");
 
     [Fact]
-    public async Task SelectMultiple_NoArgs_ReturnsAll()
+    public async Task SelectList_NoArgs_ReturnsAll()
     {
         var c = CreateContext();
 
@@ -17,11 +17,11 @@ public class EngageCompaniesTests(ITestOutputHelper output) :
     }
 
     [Fact]
-    public async Task SelectMultiple_PageSize1_ReturnsSingle()
+    public async Task SelectList_PageSize1_ReturnsSingle()
     {
         var c = CreateContext();
 
-        var result = await c.EngageBay.SelectListAsync(new SelectManyOptions { PageSize = 1 });
+        var result = await c.EngageBay.SelectListAsync(new SelectListOptions { PageSize = 1 });
 
         Assert.Single(result);
     }
